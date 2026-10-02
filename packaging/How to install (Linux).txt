@@ -1,0 +1,7 @@
+EMBER DRIVE - HOW TO INSTALL (Linux)
+
+1. Copy the "Ember Drive.vst3" folder into ~/.vst3
+   (create the folder if it doesn't exist).
+
+2. Rescan plug-ins in your music software and load "Ember Drive"
+   (maker: Ember Audio) on a track as an effect.

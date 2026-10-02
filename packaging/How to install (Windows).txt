@@ -1,0 +1,15 @@
+EMBER DRIVE - HOW TO INSTALL (Windows)
+
+1. Copy the "Ember Drive.vst3" folder into:
+
+       C:\Program Files\Common Files\VST3
+
+   Windows will ask for administrator permission. Click Continue.
+
+2. Open your music software and rescan your plug-ins.
+
+3. Load "Ember Drive" (maker: Ember Audio) on a track as an effect.
+   It's listed under Distortion.
+
+If it doesn't show up: right-click the zip file you downloaded, choose
+Properties, tick "Unblock", click OK, then unzip and copy again.

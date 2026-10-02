@@ -1,0 +1,26 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": { "major": 3, "minor": 22, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "windows-release",
+      "displayName": "Windows 64-bit Release",
+      "description": "Optimised 64-bit build with the newest Visual Studio installed. The plug-in ends up in out/windows-release/EmberDrive_artefacts/Release/VST3",
+      "binaryDir": "${sourceDir}/out/${presetName}",
+      "architecture": { "value": "x64", "strategy": "set" },
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+    {
+      "name": "release",
+      "displayName": "Release",
+      "description": "Optimised build for macOS or Linux. The plug-in ends up in out/release/EmberDrive_artefacts/Release",
+      "binaryDir": "${sourceDir}/out/${presetName}",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" },
+      "condition": { "type": "notEquals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    }
+  ],
+  "buildPresets": [
+    { "name": "windows-release", "displayName": "Windows 64-bit Release", "configurePreset": "windows-release", "configuration": "Release" },
+    { "name": "release",         "displayName": "Release",                "configurePreset": "release",         "configuration": "Release", "jobs": 4 }
+  ]
+}

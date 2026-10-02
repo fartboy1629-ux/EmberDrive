@@ -1,0 +1,17 @@
+EMBER DRIVE - HOW TO INSTALL (Mac)
+
+1. In Finder, choose Go > Go to Folder... and paste:
+
+       ~/Library/Audio/Plug-Ins
+
+2. Copy "Ember Drive.vst3" into the VST3 folder there, and
+   "Ember Drive.component" into the Components folder
+   (Logic and GarageBand use the .component version).
+
+3. This build isn't signed by Apple, so macOS will block it at first.
+   Open Terminal and paste this line, then press Return:
+
+       xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/"Ember Drive.vst3" ~/Library/Audio/Plug-Ins/Components/"Ember Drive.component"
+
+4. Restart your music software (or rescan plug-ins) and load
+   "Ember Drive" (maker: Ember Audio) on a track as an effect.
