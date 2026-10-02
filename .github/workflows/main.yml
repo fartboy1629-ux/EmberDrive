@@ -1,0 +1,60 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    # Only the Windows build has to succeed for the run to get a green tick
+    continue-on-error: ${{ matrix.os != 'windows-latest' }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Find the project files
+        shell: bash
+        run: |
+          # Works whether the files were uploaded loose, inside a folder, or as the zip itself
+          if [ -z "$(find . -name CMakeLists.txt -not -path './.git/*')" ]; then
+            find . -name '*.zip' -not -path './.git/*' -exec cmake -E tar xf {} \;
+          fi
+          project=$(find . -name CMakeLists.txt -not -path './.git/*' | head -n 1)
+          if [ -z "$project" ]; then
+            echo "::error::Couldn't find the project files. Upload the contents of the EmberDrive folder."
+            exit 1
+          fi
+          echo "PROJECT_DIR=$(dirname "$project")" >> "$GITHUB_ENV"
+
+      - name: Configure
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: cmake --build build --config Release --parallel 4
+
+      - name: Collect the plug-in
+        working-directory: ${{ env.PROJECT_DIR }}
+        shell: bash
+        run: |
+          mkdir dist
+          cp -R "build/EmberDrive_artefacts/Release/VST3/Ember Drive.vst3" dist/
+          if [ -d "build/EmberDrive_artefacts/Release/AU/Ember Drive.component" ]; then
+            cp -R "build/EmberDrive_artefacts/Release/AU/Ember Drive.component" dist/
+          fi
+          if [ -f "packaging/How to install (${{ runner.os }}).txt" ]; then
+            cp "packaging/How to install (${{ runner.os }}).txt" dist/
+          fi
+
+      - name: Upload plug-in
+        uses: actions/upload-artifact@v7
+        with:
+          name: EmberDrive-${{ runner.os }}
+          path: ${{ env.PROJECT_DIR }}/dist
+          if-no-files-found: error
